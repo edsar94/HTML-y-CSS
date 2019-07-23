@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="Python básico">
+		<meta name="keywords" content="python,pygame,programación">
+		<meta name="author" content="Alejandro Paolo Daza">
+		<title>Python</title>
+		<link rel="stylesheet" type="text/css" href="css/default.css" media="screen">
+		<link rel="stylesheet" type="text/css" href="css/printer.css" media="print">
+	</head>
+	<body>
+		<header>
+			<h1>Python Básico</h1>
+		</header>
+		<nav>
+			<a href="index.html">Introducción</a> | 
+			<a href="page1.html">El Entorno</a> | 
+			<a href="page2.html">Primer Ejercicio</a> | 
+			<a href="page3.html">Contactanos</a>
+		</nav>
+		<aside>
+			<img src="images/logo.png" alt="pygroup">
+		</aside>
+		<section>
+			<h2>Primer ejercicio</h2>
+			<h3>Generando la ventana</h3>
+			
+			<p>Vamos a poner manos a la obra, para nuestro primer ejemplo trabajaremos una aplicación que genere 
+			el rebote de un balón en una pantalla de 400 x 640 con un fondo gráfico. Para este ejercicio necesitaremos 
+			dos imágenes en formato png una que sea de una bola del deporte de nuestra preferencia y background que 
+			nos parezca acorde a la bola que elijamos, se sugieren las dos siguientes imágenes:</p>
+			
+			<ul>
+				<li><a href="https://www.dropbox.com/s/uokpwbyihpndzul/basketball.png">bola</a></li>
+				<li><a href="https://www.dropbox.com/s/jcj2czfkfx2g80f/cancha.png">fondo</a></li>
+			</ul>
+			
+			<p>Lo primero que haremos será generar una ventana de dimensiones 400 x 640 haciendo uso de pygame para esto:</p>
+			<div class="code">
+<pre>
+import sys, pygame
+
+size = width, height = 640, 400
+screen = pygame.display.set_mode(size)
+
+def main():
+	pygame.init()
+	while 1:
+		for event in pygame.event.get():
+			 if event.type == pygame.QUIT: 
+				 sys.exit()
+
+if __name__ == '__main__': 
+	main()
+</pre>
+			</div>
+		</section>
+		
+		<section>
+			<h3>Detalle del script</h3>
+			
+			<p>Veamos el detalle de nuestro primer script:</p>
+			
+			<div class="code">
+				<pre>import sys, pygame</pre>
+			</div>
+
+			<p>Traemos a nuestro script los mudulos disponibles en sys y pygame, del módulo sys  usaremos 
+			la función exit() para cerrar el programa y del módulo pygame usaremos display para generar la 
+			ventana y event para manejar los eventos que ocurran sobre la misma.</p>
+			
+			<p>En las lineas 3 y 4:</p>
+			
+			<div class="code">
+<pre>
+size = width, height = 640, 400
+screen = pygame.display.set_mode(size)
+</pre>
+			</div>
+			
+			<p>Definimos una tupla de valores almacenada en la variable size que tiene los valores de 640 y 400 y 
+			creamos una ventana haciendo uso de pygame.display.set_mode(size) la cual podremos trabajar mediante 
+			el identificador screen.</p>
+			
+			<p>Entre las lineas 8 y 13 definimos una función principal main() que se encarga de inicializar pygame 
+			mediante pygame.init() y maneja el ciclo de ejecución de nuestro juego, este ciclo hace una captura de los 
+			eventos que ocurran en nuestra ventana principal en el ciclo for de la linea 11 en el que captura todos los 
+			eventos que ocurran mediante pygame.event.get() y verifica si alguno de estos event es igual al evento 
+			pygame.QUIT y ejecuta la función sys.exit().</p>
+			
+			<div class="code">
+<pre>
+def main():
+    pygame.init()
+    while 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                sys.exit()
+</pre>			
+			</div>
+			
+			<p>Por último, la línea 20 verifica que si la ejecución que hace python del script obedece a la ejecución  
+			del script que contiene esta definición ejecute la función main(), en otras palabras verifica que si este 
+			escript es el que está ejecutando y si no ha sido importado por otro script, esto porque cuando desde python 
+			un script es ejecutado directamente este corre en el spacename __main__ pero cuando es importado este es 
+			ejecutado en su propio namespace.</p>
+			
+			<p>Al ejecutar el script obtenemos el siguiente resultado:</p>
+			
+			<img src="images/captura001.png" alt="captura 1">
+
+		</section>
+		
+		<section>
+			<h3>Agregando imágenes</h3>
+			
+			<p>Ahora pongamos las imágenes en el juego, para esto modificaremos nuestro script de manera que cargue las 
+			imágenes y luego actualice nuestra ventana con las misma. Usaremos la imagen de la cancha como fondo de la 
+			aplicación y la bola como elemento que se moverá en la misma.</p>
+			
+			<div class="code">
+<pre>
+import sys, pygame
+ 
+size = width, height = 640, 400
+
+screen = pygame.display.set_mode(size)
+
+def main():
+    pygame.init()
+    ball = pygame.image.load("imagenes/basketball.png")
+    ballrect = ball.get_rect()
+    ballrect.left = (width/2)-(ballrect.width/2)
+    ballrect.top = (height/2)-(ballrect.height/2)
+
+    court = pygame.image.load("imagenes/cancha.png")
+    courtrect = court.get_rect()
+    while 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                sys.exit()
+                
+        screen.blit(court, courtrect)
+        screen.blit(ball, ballrect)
+        
+        pygame.display.update()
+
+if __name__ == '__main__': 
+    main()
+</pre>			
+			</div>
+			
+			<p>En  esta versión del script se agregaron de la línea 9 a la 15 la carga de las dos imágenes 
+			y la inicialización del las áreas rectangulares para manejarlas, en este punto el área rectangular 
+			que mas nos interesa es el de la bola que será la que se mueva luego porque la del fondo se mantendrá 
+			estática.</p>
+			
+			<div class="code">
+<pre>
+ball = pygame.image.load("imagenes/basketball.png")
+ballrect = ball.get_rect()
+ballrect.left = (width/2)-(ballrect.width/2)
+ballrect.top = (height/2)-(ballrect.height/2)
+
+court = pygame.image.load("imagenes/cancha.png")
+courtrect = court.get_rect()	
+</pre>
+			</div>
+			
+			<p>La variable ballrect en las líneas 11 y 12 se modifica para obtener el punto central donde cargar 
+			la bola en la ventana.</p>
+			
+			<p>En las líneas 21 y 22 se pintan en el screen mediante el método blit() las imágenes de la 
+			cancha y de la bola, el primer parámetro del método es la imagen y el segundo es el área rectangular 
+			desde donde se pintan.</p>
+			
+			<div class="code">
+<pre>
+screen.blit(court, courtrect)
+screen.blit(ball, ballpos)	
+</pre>
+			</div>
+			
+			<p>Y por último en la línea 24 se actualiza la ventana para que repinte lo indicado en las líneas 21 y 22.</p>
+			
+			<div class="code">
+<pre>
+pygame.display.update()	
+</pre>
+			</div>
+			
+			<p>El resultado obtenido al ejecutar el script es el siguiente:</p>
+			
+			<img src="images/captura002.png" alt="captura 2">
+		
+		</section>
+		
+		<section>
+			<h3>Agregando movimiento</h3>
+			
+			<p>Ahora vamos a agregar movimiento a nuestra bola, de tal manera que parezca que rebota en la cancha, 
+			para esto vamos a hacer que se mueva el área rectangular de la bola y controlaremos que no suba mas de ¾ 
+			del área de la ventana y no sobrepase el límite inferior de la misma.</p>
+			
+			<div class="code">
+<pre>
+import sys, pygame
+
+size = width, height = 640, 400
+speed = [0, 2]
+screen = pygame.display.set_mode(size)
+
+def main():
+    pygame.init()
+    ball = pygame.image.load("imagenes/basketball.png")
+    ballrect = ball.get_rect()
+    ballrect.left = (width/2)-(ballrect.width/2)
+    ballrect.top = (height/2)-(ballrect.height/2)
+
+    court = pygame.image.load("imagenes/cancha.png")
+    courtrect = court.get_rect()
+    while 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                sys.exit()
+        
+        ballrect = ballrect.move(speed)
+        
+        if ballrect.top &lt; height/3 or ballrect.bottom > height:
+            speed[1] = -speed[1]
+                
+        screen.blit(court, courtrect)
+        screen.blit(ball, ballrect)
+        
+        pygame.display.update()
+
+if __name__ == '__main__': 
+    main() 	
+</pre>
+			</div>
+			
+			<p>Para lograr esto creamos una lista de dos elementos que representarán la velocidad 
+			de la bola en x y en y esta variable se creó en la linea 4 del script.</p>
+			
+			<div class="code">
+<pre>
+speed = [0, 2]
+</pre>
+			</div>
+			
+			<p>El componente con índice 0 de la lista representa la velocidad en x en la cual la bola no tendrá 
+			movimiento y el valor en el índice 1 de la lista representa la velocidad en y para la cual la bola 
+			sí tiene movimiento.</p>
+			
+			<p>En la línea 21 se modifica el área rectangular asociada a la imagen de la bola mediante el método 
+			move() asociada a la mísma.</p>
+			
+			
+			<div class="code">
+<pre>
+ballrect = ballrect.move(speed)
+</pre>
+			</div>
+			
+			<p>Y entre las líneas 23 y 24 se controla que la bola no sobrepase los límites definidos para 
+			su movimiento que son ¾ de la parte baja de la pantalla y el tope inferior de la misma, verificando 
+			estos valores del área rectangular asociada con los parámetros top y left y si se alcanzan o superan se 
+			invierte la velocidad de la bola en el componente y.</p>
+			
+			<div class="code">
+<pre>
+if ballrect.top &lt; height/3 or ballrect.bottom > height:
+    speed[1] = -speed[1]
+</pre>
+			</div>
+			
+			<p>El resultado obtenido al ejecutar el script es el siguiente:</p>
+			
+			<video controls preload="auto">
+				<source src="images/video.ogg" type="video/ogg">
+			</video>
+			
+		</section>
+		<div class="validate">
+			<a href="http://jigsaw.w3.org/css-validator/check/referer">
+				<img style="border:0;width:88px;height:31px"
+					src="http://jigsaw.w3.org/css-validator/images/vcss"
+					alt="¡CSS Válido!" />
+			</a>
+		</div>
+		<footer>
+			<p>Copyright @2014 Alejandro Daza <a href="creditos.html">Ver Referencias</a></p>
+		</footer >
+	</body>
+</html>
